@@ -10,12 +10,13 @@ end
 
 class Piece
   include Moves
-  attr_accessor :possible_moves, :moveset
+  attr_accessor :possible_moves, :moveset, :value
 
   def initialize(position)
     @position = position
     @moveset = []
     @possible_moves = []
+    @value = "_"
   end
 
   def scale(moveset)
@@ -44,6 +45,7 @@ class King < Piece
     @moveset += self.straight
     @moveset += self.diagonal
     get_possible_moves
+    @value = "K"
   end
 end
 
@@ -54,6 +56,7 @@ class Queen < Piece
     @moveset += self.diagonal
     @moveset = scale(@moveset)
     get_possible_moves
+    @value = "Q"
   end
 end
 
@@ -63,6 +66,7 @@ class Bishop < Piece
     @moveset += self.diagonal
     @moveset = scale(@moveset)
     get_possible_moves
+    @value = "B"
   end
 end
 
@@ -71,6 +75,7 @@ class Knight < Piece
     super
     @moveset += [[1,2],[1,-2],[-1,2],[-1,-2],[2,1],[2,-1],[-2,1],[-2,-1]]
     get_possible_moves
+    @value = "N"
   end
 end
 
@@ -80,6 +85,7 @@ class Rook < Piece
     @moveset += self.straight
     @moveset = scale(@moveset)
     get_possible_moves
+    @value = "R"
   end
 end
 
@@ -93,5 +99,6 @@ class Pawn < Piece
       @moveset += [[-1,0]]
     end
     get_possible_moves
+    @value = "P"
   end
 end
