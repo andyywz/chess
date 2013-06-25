@@ -10,6 +10,7 @@ class HumanPlayer < Player
     puts "Choose a square to move to (e.g. 1,0):"
     end_pos = gets.chomp.split(',')
     valid_move?(start_pos,end_pos)
+    move(start_pos,end_pos)
   end
 end
 

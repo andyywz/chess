@@ -85,7 +85,57 @@ class Board
     @board[x2][y2] = @board[x1][y1]
     @board[x1][y1] = nil
   end
+
+  def valid_move?(start_pos,end_pos)
+    x1, y1 = start_pos
+    x2, y2 = end_pos
+
+    return false if @board[x1][y1].nil? # => object?
+    piece_object = @board[x1][y1]
+
+    return false unless piece_object.possible_moves.include?(end_pos)
+
+    tempx, tempy = x1, y1
+    dx, dy = {x2 <=> x1}, {y2 <=> y1}
+
+    while tempx != x2 && tempy != y2
+      tempx += dx
+      tempy += dy
+      if !@board[tempx][tempy].nil?
+        if tempx == x2 && tempy == y2
+          # check if friendly or enemy
+        else
+          return false
+        end
+      end
+
+    end
+  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 =begin
