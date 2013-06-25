@@ -12,7 +12,7 @@ class Piece
   include Moves
   attr_accessor :possible_moves, :moveset, :value
 
-  def initialize(position)
+  def initialize(position,color)
     @position = position
     @moveset = []
     @possible_moves = []
@@ -40,65 +40,91 @@ class Piece
 end
 
 class King < Piece
-  def initialize(position)
+  def initialize(position,color)
     super
     @moveset += self.straight
     @moveset += self.diagonal
     get_possible_moves
-    @value = "K"
+    @value = case color
+    when "white"
+      "♕"
+    when "black"
+      "♛"
+    end
   end
 end
 
 class Queen < Piece
-  def initialize(position)
+  def initialize(position,color)
     super
     @moveset += self.straight
     @moveset += self.diagonal
     @moveset = scale(@moveset)
     get_possible_moves
-    @value = "Q"
+    @value = case color
+    when "white"
+      "♔"
+    when "black"
+      "♚"
+    end
   end
 end
 
 class Bishop < Piece
-  def initialize(position)
+  def initialize(position,color)
     super
     @moveset += self.diagonal
     @moveset = scale(@moveset)
     get_possible_moves
-    @value = "B"
+    @value = case color
+    when "white"
+      "♗"
+    when "black"
+      "♝"
+    end
   end
 end
 
 class Knight < Piece
-  def initialize(position)
+  def initialize(position,color)
     super
     @moveset += [[1,2],[1,-2],[-1,2],[-1,-2],[2,1],[2,-1],[-2,1],[-2,-1]]
     get_possible_moves
-    @value = "N"
+    @value = case color
+    when "white"
+      "♘"
+    when "black"
+      "♞"
+    end
   end
 end
 
 class Rook < Piece
-  def initialize(position)
+  def initialize(position,color)
     super
     @moveset += self.straight
     @moveset = scale(@moveset)
     get_possible_moves
-    @value = "R"
+    @value = case color
+    when "white"
+      "♖"
+    when "black"
+      "♜"
+    end
   end
 end
 
 class Pawn < Piece
   def initialize(position,color)
-    super(position)
+    super(position,color)
     case color
     when "white"
       @moveset += [[1,0]]
+      @value = "♙"
     when "black"
       @moveset += [[-1,0]]
+      @value = "♟"
     end
     get_possible_moves
-    @value = "P"
   end
 end

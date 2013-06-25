@@ -28,35 +28,53 @@ class Board
 
   def set_royals
     row = 0
+    color = "black"
     while true
       @board.each_index do |col|
         if col == 0 || col == 7
-          @board[row][col] = Rook.new([row,col])
+          @board[row][col] = Rook.new([row,col],color)
         elsif col == 1 || col == 6
-          @board[row][col] = Knight.new([row,col])
+          @board[row][col] = Knight.new([row,col],color)
         elsif col == 2 || col == 5
-          @board[row][col] = Bishop.new([row,col])
+          @board[row][col] = Bishop.new([row,col],color)
         elsif col == 3
-          @board[row][col] = King.new([row,col])
+          @board[row][col] = King.new([row,col],color)
         elsif col == 4
-          @board[row][col] = Queen.new([row,col])
+          @board[row][col] = Queen.new([row,col],color)
         end
       end
-      break if row == 7
-      row = 7 if row == 0
+      if row == 0
+        row = 7
+        color = "white"
+      else
+        break
+      end
     end
   end
 
   def draw
+    black_rows = [0,2,4,6]
     8.times do |row|
+      if black_rows.include?(row)
+        square_color = "▢" #black square
+      else
+        square_color = "▢" #white square
+      end
       8.times do |col|
         if @board[row][col].nil?
-          @picture_board[row][col] = " "
+          @picture_board[row][col] = square_color
+          square_color = square_color == "▢" ? "▢" : "▢"
+          # square_color = square_color == "b" ? "w" : "b"
         else
           @picture_board[row][col] = @board[row][col].value
         end
       end
     end
-    @picture_board.each { |line| p line }
+    @picture_board.each do |row|
+      row.each do |square|
+        print "#{square} "
+      end
+      puts
+    end
   end
 end
