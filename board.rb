@@ -77,4 +77,8 @@ class Board
       puts
     end
   end
+
+  def move(start_pos,end_pos)
+
+  end
 end

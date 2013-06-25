@@ -11,16 +11,16 @@ class Chess
     # @player2 = player2
     @board = Board.new
     @board.create_new_board
-    @board.draw
+    # @board.draw
     # play
   end
 
   def play
-    current_player = @player1
+    player = @player1
     until game_over?
-      display_board
+      @board.draw
       @player1.turn
-      current_player = current_player == @player1 ? @player2 : @player1
+      player = player == @player1 ? @player2 : @player1
     end
   end
 end
