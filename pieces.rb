@@ -10,10 +10,11 @@ end
 
 class Piece
   include Moves
-  attr_accessor :possible_moves, :moveset, :value
+  attr_accessor :possible_moves, :moveset, :value, :color
 
   def initialize(position,color)
     @position = position
+    @color = color
     @moveset = []
     @possible_moves = []
     @value = "_"
@@ -45,7 +46,7 @@ class King < Piece
     @moveset += self.straight
     @moveset += self.diagonal
     get_possible_moves
-    @value = case color
+    @value = case @color
     when "white"
       "♕"
     when "black"
@@ -61,7 +62,7 @@ class Queen < Piece
     @moveset += self.diagonal
     @moveset = scale(@moveset)
     get_possible_moves
-    @value = case color
+    @value = case @color
     when "white"
       "♔"
     when "black"
@@ -76,7 +77,7 @@ class Bishop < Piece
     @moveset += self.diagonal
     @moveset = scale(@moveset)
     get_possible_moves
-    @value = case color
+    @value = case @color
     when "white"
       "♗"
     when "black"
@@ -90,7 +91,7 @@ class Knight < Piece
     super
     @moveset += [[1,2],[1,-2],[-1,2],[-1,-2],[2,1],[2,-1],[-2,1],[-2,-1]]
     get_possible_moves
-    @value = case color
+    @value = case @color
     when "white"
       "♘"
     when "black"
@@ -105,7 +106,7 @@ class Rook < Piece
     @moveset += self.straight
     @moveset = scale(@moveset)
     get_possible_moves
-    @value = case color
+    @value = case @color
     when "white"
       "♖"
     when "black"
@@ -117,7 +118,7 @@ end
 class Pawn < Piece
   def initialize(position,color)
     super(position,color)
-    case color
+    case @color
     when "white"
       @moveset += [[1,0]]
       @value = "♙"

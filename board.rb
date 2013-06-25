@@ -21,8 +21,8 @@ class Board
 
   def set_pawns
     @board.each_index do |col|
-      @board[1][col] = Pawn.new([1, col], "white")
-      @board[6][col] = Pawn.new([6, col], "black")
+      @board[6][col] = Pawn.new([6, col], "white")
+      @board[1][col] = Pawn.new([1, col], "black")
     end
   end
 
@@ -70,6 +70,7 @@ class Board
         end
       end
     end
+
     @picture_board.each do |row|
       row.each do |square|
         print "#{square} "
@@ -79,6 +80,43 @@ class Board
   end
 
   def move(start_pos,end_pos)
-
+    x1, y1 = start_pos
+    x2, y2 = end_pos
+    @board[x2][y2] = @board[x1][y1]
+    @board[x1][y1] = nil
   end
 end
+
+
+=begin
+valid_move?(start_pos, end_pos)
+
+If it's not in possible move list, then don't even bother
+Just return false
+
+x1, y1 = start_pos
+x2, y2 = end_pos
+tempx = x1
+tempy = y1
+
+dx = {x2 <=> x1}
+dy = {y2 <=> y1}
+
+Bishop is at 7,7
+Bishop will move to 0,0
+
+dx = -1
+dy = -1
+
+while
+
+tempx = tempx + dx
+tempy = tempy + dy
+
+unless board([tempx,tempy]).nil?
+check first if its the final pos if so
+
+return false
+end
+
+=end
