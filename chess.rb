@@ -23,9 +23,9 @@ class Chess
       @board.draw
       begin
         start_pos, end_pos = player.turn
-
-        if @board.valid_move?(start_pos, end_pos, player.player_color)
-          @board.move(start_pos,end_pos) # unless @board.check?
+        player_color = player.player_color
+        if @board.valid_move?(start_pos, end_pos, player_color)
+          @board.move(start_pos,end_pos) unless @board.check?(player_color)
         else
           raise ArgumentError.new "Invalid move!"
         end

@@ -10,7 +10,6 @@ class Board
     @all_pieces = Set.new
     create_new_board
     fill_set
-
     # @black_pieces = @all_pieces.dup.select! { |piece| piece.color == "black" }
     # @white_pieces = @all_pieces.dup.select! { |piece| piece.color == "white" }
     # puts "white"
@@ -99,11 +98,7 @@ class Board
   end
 
   def fill_set
-    8.times do |row|
-      8.times do |col|
-        @all_pieces << @virtual_board[row][col] if !@virtual_board[row][col].nil?
-      end
-    end
+    @all_pieces.merge(@virtual_board.dup.flatten.compact)
     # @all_pieces.each do |piece|
     #   puts "#{piece.value} #{piece.position}"
     # end
