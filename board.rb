@@ -90,7 +90,8 @@ class Board
     x1, y1 = start_pos
     x2, y2 = end_pos
 
-    return false if @board[x1][y1].nil? # => object?
+    return false if @board[x1][y1].nil? # if the start pos doesn't have a piece
+    return false unless x2.between?(0,7) && y2.between?(0,7)
     piece_object = @board[x1][y1]
 
     return false unless piece_object.possible_moves.include?(end_pos)
@@ -101,48 +102,30 @@ class Board
     while tempx != x2 && tempy != y2
       tempx += dx
       tempy += dy
-      if !@board[tempx][tempy].nil?
+      
+      unless @board[tempx][tempy].nil? # checks for clear path
         if tempx == x2 && tempy == y2
           # check if friendly or enemy
+          if is_enemy?(@board[x2][y2]) # can replace with x2,y2
+            return true
+          else
+            puts "Can't kill your ally!!"
+            return false
+          end
         else
+          puts "Your path is blocked. Invalid move!"
           return false
         end
       end
-
     end
+    
+    # if it is here means the path is full of nils
+    true
   end
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 =begin
 valid_move?(start_pos, end_pos)
-
-If it's not in possible move list, then don't even bother
-Just return false
 
 x1, y1 = start_pos
 x2, y2 = end_pos
@@ -151,12 +134,6 @@ tempy = y1
 
 dx = {x2 <=> x1}
 dy = {y2 <=> y1}
-
-Bishop is at 7,7
-Bishop will move to 0,0
-
-dx = -1
-dy = -1
 
 while
 
