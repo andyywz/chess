@@ -24,8 +24,10 @@ class Chess
       begin
         start_pos, end_pos = player.turn
         player_color = player.player_color
+        enemy_color = player.player_color == "white" ? "black" : "white"
         if @board.valid_move?(start_pos, end_pos, player_color)
-          @board.move(start_pos,end_pos) unless @board.check?(player_color)
+          @board.move(start_pos,end_pos) # unless @board.check?(player_color)
+          # @board.check?(enemy_color)
         else
           raise ArgumentError.new "Invalid move!"
         end

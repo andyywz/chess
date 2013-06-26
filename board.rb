@@ -176,7 +176,8 @@ class Board
     true
   end
 
-  def check?
+  def check?(player_color)
+
     false
   end
 
