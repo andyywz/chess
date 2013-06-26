@@ -100,22 +100,29 @@ class Board
     piece1 = self.virtual_board[x1][y1]
     piece2 = self.virtual_board[x2][y2]
 
+    # 2. If pawn.
+    if piece1.is_a?(Pawn)
+      if !valid_pawn_move?(piece1, piece2, end_pos)
+        return false
+      end
+    end
+
+    # 1. If move possible
+    # Is the start_pos empty? if not, is the end move possible?
     if is_empty?(piece1)
       puts "No piece in the initial position."
       return false
-    end
-
-    # 1. If move possible, 2. If knight, 3. If pawn, 4. else
-    unless piece1.possible_moves.include?(end_pos)
+    elsif !piece1.possible_moves.include?(end_pos) && !piece1.is_a(Pawn)
       puts "The initial piece was a #{piece1.class}"
       return false
     end
 
-    # if piece1.is_a?(Knight)
+    # 2. If pawn.
     if piece1.is_a?(Pawn)
-      if !valid_pawn_move?(piece1,piece2)
+      if !valid_pawn_move?(piece1, piece2, end_pos)
         return false
       end
+    # 3. If not knight or pawn.
     elsif !piece1.is_a?(Knight)
       tempx, tempy = x1, y1
       dx, dy = (x2 <=> x1), (y2 <=> y1)
@@ -127,7 +134,6 @@ class Board
 
         if !is_empty?(temp_spot) && (tempx != x2 || tempy != y2)
           # checks for clear path
-          # puts "Found blockage!"
           puts "Your path is blocked."
           return false
         end
@@ -144,8 +150,16 @@ class Board
     true
   end
 
-  def valid_pawn_move?(piece1, piece2)
+  def valid_pawn_move?(piece1, piece2, end_pos)
+    color = piece1.color
+    start_pos = piece1.position
 
+    piece1.reset_moveset
+    piece1.moveset +=
+
+    piece1.get_possible_moves
+    return true if piece1.possible_moves.include?(end_pos)
+    false
   end
 
   def is_enemy?(piece1, piece2)
@@ -161,3 +175,44 @@ class Board
     false
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

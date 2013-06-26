@@ -121,14 +121,25 @@ end
 class Pawn < Piece
   def initialize(position,color)
     super(position,color)
+    reset_moveset
     case @color
     when "white"
-      @moveset += [[-1,0]]
       @value = "♙"
     when "black"
-      @moveset += [[1,0]]
       @value = "♟"
     end
     get_possible_moves
+  end
+
+  def reset_moveset
+    @moveset = []
+    case @color
+    when "white"
+      @moveset += [[-1,0]]
+      @moveset += [[-2,0]] if position[0] == 6
+    when "black"
+      @moveset += [[1,0]]
+      @moveset += [[2,0]] if position[0] == 1
+    end
   end
 end
