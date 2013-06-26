@@ -97,76 +97,73 @@ class Board
   def valid_move?(start_pos,end_pos)
     x1, y1 = start_pos
     x2, y2 = end_pos
+    piece1 = self.virtual_board[x1][y1]
+    piece2 = self.virtual_board[x2][y2]
 
-    # return false if self.virtual_board[x1][y1].nil? # if the start pos doesn't have a piece
-    # return false unless self.virtual_board[x1][y1].possible_moves.include?(end_pos)
-
-    if self.virtual_board[x1][y1].nil?
+    if is_empty?(piece1)
       puts "No piece in the initial position."
       return false
-    elsif self.virtual_board[x1][y1].class == Knight
-      puts "I am a Knight"
-      return true
-    elsif self.virtual_board[x1][y1].class == Pawn
-      puts "I am a Pawn"
-      return true
-    else
-      unless self.virtual_board[x1][y1].possible_moves.include?(end_pos)
-        puts "The initial piece was a #{self.virtual_board[x1][y1].class}"
+    end
+
+    # 1. If move possible, 2. If knight, 3. If pawn, 4. else
+    unless piece1.possible_moves.include?(end_pos)
+      puts "The initial piece was a #{piece1.class}"
+      return false
+    elsif !is_empty?(piece2)
+      if !is_enemy?(piece1,piece2)
+        puts "Can't kill your ally!!"
         return false
       end
+    elsif piece1.is_a?(Knight)
+      return true
 
+    # elsif piece1.is_a?(Pawn)
+#       if valid_pawn_move?(#some positional stuff)
+#         return true if is_enemy?(piece2) || is_empty?(piece2)
+#       end
+#       return false
+    else
       tempx, tempy = x1, y1
       dx, dy = (x2 <=> x1), (y2 <=> y1)
 
       until tempx == x2 && tempy == y2
         tempx += dx
         tempy += dy
+        temp_spot = self.virtual_board[tempx][tempy]
 
-        unless self.virtual_board[tempx][tempy].nil? # checks for clear path
+        if !is_empty?(temp_spot) # checks for clear path
           # puts "Found blockage!"
           if tempx == x2 && tempy == y2
-            # check if friendly or enemy
-            if is_enemy?(self.virtual_board[x2][y2]) # can replace with x2,y2
-              return true
-            else
-              puts "Can't kill your ally!!"
-              return false
-            end
+            return true
+            # if is_enemy?(piece1,piece2)
+            #   return true
+            # else
+            #   puts "Can't kill your ally!!"
+            #   return false
+            # end
           else
             puts "Your path is blocked."
             return false
           end
         end
       end
-
-      # if it is here means the path is full of nils
-      return true
     end
   end
+
+  def valid_pawn_move?
+
+  end
+
+  def is_enemy?(piece1, piece2)
+    if piece1.color != piece2.color
+      true
+    else
+      false
+    end
+  end
+
+  def is_empty?(piece)
+    return true if piece.nil?
+    false
+  end
 end
-
-=begin
-valid_move?(start_pos, end_pos)
-
-x1, y1 = start_pos
-x2, y2 = end_pos
-tempx = x1
-tempy = y1
-
-dx = {x2 <=> x1}
-dy = {y2 <=> y1}
-
-while
-
-tempx = tempx + dx
-tempy = tempy + dy
-
-unless board([tempx,tempy]).nil?
-check first if its the final pos if so
-
-return false
-end
-end
-
-=end

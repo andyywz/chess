@@ -41,7 +41,7 @@ class Chess
     end
   end
 
-  def game_over?
+  def game_over? # board only one king, checkmate,
 
   end
 end
