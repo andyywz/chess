@@ -121,13 +121,15 @@ end
 class Pawn < Piece
   def initialize(position,color)
     super(position,color)
-    reset_moveset
+
     case @color
     when "white"
       @value = "♙"
     when "black"
       @value = "♟"
     end
+
+    reset_moveset
     get_possible_moves
   end
 
@@ -143,23 +145,50 @@ class Pawn < Piece
     end
   end
 
-  def set_pawn_moves(board, end_pos)
-    self.reset_moveset
-    x1,y1 = self.position
-    x2,y2 = end_pos
-
-    if !board[x2][y2].nil?
-      self.moveset = []
-
-      if self.color == "white" && self.color != board[x2][y2].color
-        self.moveset += [[-1,-1]] if x2 == x1 - 1 && y2 = y1 - 1
-        self.moveset += [[-1,1]] if x2 == x1 - 1 && y2 = y1 + 1
-      elsif self.color == "black" && self.color != board[x2][y2].color
-        self.moveset += [[1,-1]] if x2 == x1 + 1 && y2 = y1 - 1
-        self.moveset += [[1,1]] if x2 == x1 + 1 && y2 = y1 + 1
+  def set_pawn_moves(board)
+    x,y = @position
+    @moveset = []
+    if @color == "white"
+      if x - 1 >= 0
+        @moveset << [-1,0] if board[x - 1][y].nil?
+        @moveset << [-2,0] if board[x - 1][y].nil? && board[x - 2][y].nil? && x == 6
+        @moveset << [-1,-1] if y - 1 >= 0 && !board[x - 1][y - 1].nil?
+        @moveset << [-1,1] if y + 1 <= 7 && !board[x - 1][y + 1].nil?
       end
-
+    else
+      all_potential_moves = [[1,-1],[1,1],[2,0],[1,0]]
+      if x + 1 <= 7
+        @moveset << [1,0] if board[x + 1][y].nil?
+        @moveset << [2,0] if board[x + 1][y].nil? && board[x + 2][y].nil? && x == 1
+        @moveset << [1,-1] if y - 1 >= 0 && !board[x + 1][y - 1].nil?
+        @moveset << [1,1] if y + 1 <= 7 && !board[x + 1][y + 1].nil?
+      end
     end
     self.get_possible_moves
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

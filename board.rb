@@ -7,10 +7,10 @@ class Board
   def initialize
     @picture_board = []
     @virtual_board = []
-    # @all_pieces = Set.new
+    @all_pieces = Set.new
     create_new_board
+    fill_set
 
-    # fill_set
     # @black_pieces = @all_pieces.dup.select! { |piece| piece.color == "black" }
     # @white_pieces = @all_pieces.dup.select! { |piece| piece.color == "white" }
     # puts "white"
@@ -113,11 +113,20 @@ class Board
     puts "got into move"
     x1, y1 = start_pos
     x2, y2 = end_pos
+    remove_from_set(end_pos)
 
     self.virtual_board[x2][y2] = self.virtual_board[x1][y1] #copy object
     self.virtual_board[x2][y2].position = end_pos #tell object its new position
     self.virtual_board[x2][y2].get_possible_moves #find new possible moves
     self.virtual_board[x1][y1] = nil
+
+    # @all_pieces.each do |piece|
+    #   puts "#{piece.value} #{piece.position}" if piece.class == Pawn
+    # end
+  end
+
+  def remove_from_set(end_pos)
+    @all_pieces.delete_if { |piece| piece.position == end_pos }
   end
 
   def valid_move?(start_pos, end_pos, player_color)
@@ -128,7 +137,7 @@ class Board
 
     # 2. If pawn.
     if piece1.is_a?(Pawn)
-      piece1.set_pawn_moves(self.virtual_board, end_pos)
+      piece1.set_pawn_moves(self.virtual_board)
     end
 
     # 1. If move possible
@@ -145,7 +154,7 @@ class Board
     end
 
     # 3. If not knight or pawn.
-    if !piece1.is_a?(Knight)
+    if !piece1.is_a?(Knight) && !piece1.is_a?(Pawn)
       tempx, tempy = x1, y1
       dx, dy = (x2 <=> x1), (y2 <=> y1)
 
@@ -154,15 +163,10 @@ class Board
         tempy += dy
         temp_spot = self.virtual_board[tempx][tempy]
 
-        if (tempx != x2 || tempy != y2)
-          if piece1.is_a?(Pawn)
-            return false if !is_empty?(temp_spot)
-
-          elsif !is_empty?(temp_spot)
-            # checks for clear path
-            puts "Your path is blocked."
-            return false
-          end
+        if (tempx != x2 || tempy != y2) && !is_empty?(temp_spot)
+          # checks for clear path
+          puts "Your path is blocked."
+          return false
         end
       end
     end
@@ -175,6 +179,10 @@ class Board
     end
 
     true
+  end
+
+  def check?
+    false
   end
 
   def is_enemy?(piece1, piece2)
