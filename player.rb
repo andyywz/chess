@@ -1,9 +1,15 @@
 class Player
+  attr_accessor :player_color
+
+  def initialize(player_color)
+    @player_color = player_color
+  end
 end
 
 class HumanPlayer < Player
   def turn
     begin
+      puts "#{self.player_color}'s turn"
       puts "Choose a square to move from (e.g. 0,0):"
       start_pos = prompt_pos
     rescue ArgumentError.new => e

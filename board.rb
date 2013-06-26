@@ -1,4 +1,5 @@
 # encoding: UTF-8
+require 'Set'
 
 class Board
   attr_accessor :virtual_board, :king
@@ -6,6 +7,20 @@ class Board
   def initialize
     @picture_board = []
     @virtual_board = []
+    # @all_pieces = Set.new
+    create_new_board
+
+    # fill_set
+    # @black_pieces = @all_pieces.dup.select! { |piece| piece.color == "black" }
+    # @white_pieces = @all_pieces.dup.select! { |piece| piece.color == "white" }
+    # puts "white"
+    # @white_pieces.each do |piece|
+    #   puts "#{piece.value} #{piece.position}"
+    # end
+    # puts "black"
+    # @black_pieces.each do |piece|
+    #   puts "#{piece.value} #{piece.position}"
+    # end
   end
 
   def create_new_board
@@ -41,7 +56,6 @@ class Board
           @virtual_board[row][col] = Bishop.new([row,col],color)
         elsif col == 3
           @virtual_board[row][col] = King.new([row,col],color)
-          @king = @virtual_board[row][col]
         elsif col == 4
           @virtual_board[row][col] = Queen.new([row,col],color)
         end
@@ -84,6 +98,17 @@ class Board
     end
   end
 
+  def fill_set
+    8.times do |row|
+      8.times do |col|
+        @all_pieces << @virtual_board[row][col] if !@virtual_board[row][col].nil?
+      end
+    end
+    # @all_pieces.each do |piece|
+    #   puts "#{piece.value} #{piece.position}"
+    # end
+  end
+
   def move(start_pos,end_pos)
     puts "got into move"
     x1, y1 = start_pos
@@ -95,7 +120,7 @@ class Board
     self.virtual_board[x1][y1] = nil
   end
 
-  def valid_move?(start_pos,end_pos)
+  def valid_move?(start_pos, end_pos, player_color)
     x1, y1 = start_pos
     x2, y2 = end_pos
     piece1 = self.virtual_board[x1][y1]
@@ -110,6 +135,9 @@ class Board
     # Is the start_pos empty? if not, is the end move possible?
     if is_empty?(piece1)
       puts "No piece in the initial position."
+      return false
+    elsif wrong_piece?(piece1, player_color)
+      puts "That is not your color!"
       return false
     elsif !piece1.possible_moves.include?(end_pos)
       puts "The initial piece was a #{piece1.class}"
@@ -160,6 +188,10 @@ class Board
   def is_empty?(piece)
     return true if piece.nil?
     false
+  end
+
+  def wrong_piece?(piece, player_color)
+    return true if piece.color != player_color
   end
 end
 

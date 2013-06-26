@@ -7,11 +7,10 @@ require "./player.rb"
 class Chess
   attr_accessor :player1, :player2, :board
 
-  def initialize(player1,player2)
-    @player1 = player1
-    @player2 = player2
+  def initialize
+    @player1 = HumanPlayer.new("white")
+    @player2 = HumanPlayer.new("black")
     @board = Board.new
-    @board.create_new_board
     # @board.draw
     play
   end
@@ -25,9 +24,8 @@ class Chess
       begin
         start_pos, end_pos = player.turn
 
-        if @board.valid_move?(start_pos,end_pos)
-          puts "Im going into move!"
-          @board.move(start_pos,end_pos)
+        if @board.valid_move?(start_pos, end_pos, player.player_color)
+          @board.move(start_pos,end_pos) unless @board.check?
         else
           raise ArgumentError.new "Invalid move!"
         end
@@ -44,6 +42,4 @@ class Chess
   end
 end
 
-player1 = HumanPlayer.new
-player2 = HumanPlayer.new
-c = Chess.new(player1,player2)
+c = Chess.new
