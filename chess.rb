@@ -18,24 +18,29 @@ class Chess
 
   def play
     player = @player1
-    
+
     2.times do
       p player
     # until game_over?
       @board.draw
       begin
         start_pos, end_pos = player.turn
-        if @board.valid_move?(start_pos,end_pos) 
+
+        p @board.valid_move?(start_pos,end_pos)
+        if @board.valid_move?(start_pos,end_pos)
+          puts "Im going into move!"
           @board.move(start_pos,end_pos)
+          @board.draw
         else
-          raise "Invalid move!"
+          raise ArgumentError.new "Invalid move!"
         end
       rescue
+        puts "Im going to retry"
         retry
       end
       player = player == @player1 ? @player2 : @player1
     end
-    
+
   end
 end
 

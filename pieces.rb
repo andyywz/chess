@@ -122,10 +122,10 @@ class Pawn < Piece
     super(position,color)
     case @color
     when "white"
-      @moveset += [[1,0]]
+      @moveset += [[-1,0]]
       @value = "♙"
     when "black"
-      @moveset += [[-1,0]]
+      @moveset += [[1,0]]
       @value = "♟"
     end
     get_possible_moves

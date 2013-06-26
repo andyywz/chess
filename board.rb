@@ -1,19 +1,19 @@
 # encoding: UTF-8
 
 class Board
-  attr_accessor :board
+  attr_accessor :virtual_board
 
   def initialize
     @picture_board = []
-    @board = []
+    @virtual_board = []
   end
 
   def create_new_board
     8.times do |row|
-      @board << []
+      @virtual_board << []
       @picture_board << []
       8.times do |col|
-        @board[row][col] = nil
+        @virtual_board[row][col] = nil
         @picture_board[row][col] = nil
       end
     end
@@ -22,9 +22,9 @@ class Board
   end
 
   def set_pawns
-    @board.each_index do |col|
-      @board[6][col] = Pawn.new([6, col], "white")
-      @board[1][col] = Pawn.new([1, col], "black")
+    @virtual_board.each_index do |col|
+      @virtual_board[6][col] = Pawn.new([6, col], "white")
+      @virtual_board[1][col] = Pawn.new([1, col], "black")
     end
   end
 
@@ -32,17 +32,17 @@ class Board
     row = 0
     color = "black"
     while true
-      @board.each_index do |col|
+      @virtual_board.each_index do |col|
         if col == 0 || col == 7
-          @board[row][col] = Rook.new([row,col],color)
+          @virtual_board[row][col] = Rook.new([row,col],color)
         elsif col == 1 || col == 6
-          @board[row][col] = Knight.new([row,col],color)
+          @virtual_board[row][col] = Knight.new([row,col],color)
         elsif col == 2 || col == 5
-          @board[row][col] = Bishop.new([row,col],color)
+          @virtual_board[row][col] = Bishop.new([row,col],color)
         elsif col == 3
-          @board[row][col] = King.new([row,col],color)
+          @virtual_board[row][col] = King.new([row,col],color)
         elsif col == 4
-          @board[row][col] = Queen.new([row,col],color)
+          @virtual_board[row][col] = Queen.new([row,col],color)
         end
       end
       if row == 0
@@ -55,6 +55,7 @@ class Board
   end
 
   def draw
+    puts "got in draw"
     black_rows = [0,2,4,6]
     8.times do |row|
       if black_rows.include?(row)
@@ -63,12 +64,12 @@ class Board
         square_color = "▢" #white square
       end
       8.times do |col|
-        if @board[row][col].nil?
+        if self.virtual_board[row][col].nil?
           @picture_board[row][col] = square_color
           square_color = square_color == "▢" ? "▢" : "▢"
           # square_color = square_color == "b" ? "w" : "b"
         else
-          @picture_board[row][col] = @board[row][col].value
+          @picture_board[row][col] = self.virtual_board[row][col].value
         end
       end
     end
@@ -84,16 +85,20 @@ class Board
   def move(start_pos,end_pos)
     x1, y1 = start_pos
     x2, y2 = end_pos
-    @board[x2][y2] = @board[x1][y1]
-    @board[x1][y1] = nil
+
+    # p self.virtual_board[x2][y2]
+    # p self.virtual_board[x1][y1]
+    self.virtual_board[x2][y2] = self.virtual_board[x1][y1]
+    self.virtual_board[x1][y1] = nil
+
   end
 
   def valid_move?(start_pos,end_pos)
     x1, y1 = start_pos
     x2, y2 = end_pos
-    
-    return false if @board[x1][y1].nil? # if the start pos doesn't have a piece
-    return false unless @board[x1][y1].possible_moves.include?(end_pos)
+
+    return false if self.virtual_board[x1][y1].nil? # if the start pos doesn't have a piece
+    return false unless self.virtual_board[x1][y1].possible_moves.include?(end_pos)
 
     tempx, tempy = x1, y1
     dx, dy = (x2 <=> x1), (y2 <=> y1)
@@ -101,11 +106,11 @@ class Board
     while tempx != x2 && tempy != y2
       tempx += dx
       tempy += dy
-      
-      unless @board[tempx][tempy].nil? # checks for clear path
+
+      unless self.virtual_board[tempx][tempy].nil? # checks for clear path
         if tempx == x2 && tempy == y2
           # check if friendly or enemy
-          if is_enemy?(@board[x2][y2]) # can replace with x2,y2
+          if is_enemy?(self.virtual_board[x2][y2]) # can replace with x2,y2
             return true
           else
             puts "Can't kill your ally!!"
@@ -117,8 +122,9 @@ class Board
         end
       end
     end
-    
+
     # if it is here means the path is full of nils
+    puts "I passed"
     true
   end
 end
