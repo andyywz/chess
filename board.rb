@@ -56,7 +56,7 @@ class Board
   end
 
   def draw
-    puts "got in draw"
+    puts "  0 1 2 3 4 5 6 7"
     black_rows = [0,2,4,6]
     8.times do |row|
       if black_rows.include?(row)
@@ -75,7 +75,8 @@ class Board
       end
     end
 
-    @picture_board.each do |row|
+    @picture_board.each_with_index do |row,index|
+      print "#{index} "
       row.each do |square|
         print "#{square} "
       end
@@ -109,7 +110,9 @@ class Board
     unless piece1.possible_moves.include?(end_pos)
       puts "The initial piece was a #{piece1.class}"
       return false
-    elsif !is_empty?(piece2)
+    end
+
+    if !is_empty?(piece2)
       if !is_enemy?(piece1,piece2)
         puts "Can't kill your ally!!"
         return false
