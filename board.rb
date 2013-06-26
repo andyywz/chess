@@ -113,10 +113,9 @@ class Board
 
     # if piece1.is_a?(Knight)
     if piece1.is_a?(Pawn)
-#       if valid_pawn_move?(#some positional stuff)
-#         return true if is_enemy?(piece2) || is_empty?(piece2)
-#       end
-#       return false
+      if !valid_pawn_move?(piece1,piece2)
+        return false
+      end
     elsif !piece1.is_a?(Knight)
       tempx, tempy = x1, y1
       dx, dy = (x2 <=> x1), (y2 <=> y1)
@@ -136,7 +135,7 @@ class Board
     end
 
     if !is_empty?(piece2)
-      if !is_enemy?(piece1,piece2)
+      if !is_enemy?(piece1, piece2)
         puts "Can't kill your ally!!"
         return false
       end
@@ -145,7 +144,7 @@ class Board
     true
   end
 
-  def valid_pawn_move?
+  def valid_pawn_move?(piece1, piece2)
 
   end
 
