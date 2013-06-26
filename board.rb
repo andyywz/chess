@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 class Board
-  attr_accessor :virtual_board
+  attr_accessor :virtual_board, :king
 
   def initialize
     @picture_board = []
@@ -41,6 +41,7 @@ class Board
           @virtual_board[row][col] = Bishop.new([row,col],color)
         elsif col == 3
           @virtual_board[row][col] = King.new([row,col],color)
+          @king = @virtual_board[row][col]
         elsif col == 4
           @virtual_board[row][col] = Queen.new([row,col],color)
         end
@@ -97,35 +98,51 @@ class Board
     x1, y1 = start_pos
     x2, y2 = end_pos
 
-    return false if self.virtual_board[x1][y1].nil? # if the start pos doesn't have a piece
-    return false unless self.virtual_board[x1][y1].possible_moves.include?(end_pos)
+    # return false if self.virtual_board[x1][y1].nil? # if the start pos doesn't have a piece
+    # return false unless self.virtual_board[x1][y1].possible_moves.include?(end_pos)
 
-    tempx, tempy = x1, y1
-    dx, dy = (x2 <=> x1), (y2 <=> y1)
+    if self.virtual_board[x1][y1].nil?
+      puts "No piece in the initial position."
+      return false
+    elsif self.virtual_board[x1][y1].class == Knight
+      puts "I am a Knight"
+      return true
+    elsif self.virtual_board[x1][y1].class == Pawn
+      puts "I am a Pawn"
+      return true
+    else
+      unless self.virtual_board[x1][y1].possible_moves.include?(end_pos)
+        puts "The initial piece was a #{self.virtual_board[x1][y1].class}"
+        return false
+      end
 
-    while tempx != x2 && tempy != y2
-      tempx += dx
-      tempy += dy
+      tempx, tempy = x1, y1
+      dx, dy = (x2 <=> x1), (y2 <=> y1)
 
-      unless self.virtual_board[tempx][tempy].nil? # checks for clear path
-        if tempx == x2 && tempy == y2
-          # check if friendly or enemy
-          if is_enemy?(self.virtual_board[x2][y2]) # can replace with x2,y2
-            return true
+      until tempx == x2 && tempy == y2
+        tempx += dx
+        tempy += dy
+
+        unless self.virtual_board[tempx][tempy].nil? # checks for clear path
+          # puts "Found blockage!"
+          if tempx == x2 && tempy == y2
+            # check if friendly or enemy
+            if is_enemy?(self.virtual_board[x2][y2]) # can replace with x2,y2
+              return true
+            else
+              puts "Can't kill your ally!!"
+              return false
+            end
           else
-            puts "Can't kill your ally!!"
+            puts "Your path is blocked."
             return false
           end
-        else
-          puts "Your path is blocked."
-          return false
         end
       end
-    end
 
-    # if it is here means the path is full of nils
-    puts "I passed"
-    true
+      # if it is here means the path is full of nils
+      return true
+    end
   end
 end
 
