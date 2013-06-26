@@ -19,8 +19,7 @@ class Chess
   def play
     player = @player1
 
-    4.times do
-      p player
+    loop do
     # until game_over?
       @board.draw
       begin
@@ -28,7 +27,7 @@ class Chess
 
         # p @board.valid_move?(start_pos,end_pos)
         if @board.valid_move?(start_pos,end_pos)
-          puts "Im going into move!"
+          # puts "Im going into move!"
           @board.move(start_pos,end_pos)
         else
           raise ArgumentError.new "Invalid move!"

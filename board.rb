@@ -88,11 +88,10 @@ class Board
     x1, y1 = start_pos
     x2, y2 = end_pos
 
-    # p self.virtual_board[x2][y2]
-    # p self.virtual_board[x1][y1]
-    self.virtual_board[x2][y2] = self.virtual_board[x1][y1]
+    self.virtual_board[x2][y2] = self.virtual_board[x1][y1] #copy object
+    self.virtual_board[x2][y2].position = end_pos #tell object its new position
+    self.virtual_board[x2][y2].get_possible_moves #find new possible moves
     self.virtual_board[x1][y1] = nil
-
   end
 
   def valid_move?(start_pos,end_pos)
@@ -112,20 +111,13 @@ class Board
       return false
     end
 
-    if !is_empty?(piece2)
-      if !is_enemy?(piece1,piece2)
-        puts "Can't kill your ally!!"
-        return false
-      end
-    elsif piece1.is_a?(Knight)
-      return true
-
-    # elsif piece1.is_a?(Pawn)
+    # if piece1.is_a?(Knight)
+    if piece1.is_a?(Pawn)
 #       if valid_pawn_move?(#some positional stuff)
 #         return true if is_enemy?(piece2) || is_empty?(piece2)
 #       end
 #       return false
-    else
+    elsif !piece1.is_a?(Knight)
       tempx, tempy = x1, y1
       dx, dy = (x2 <=> x1), (y2 <=> y1)
 
@@ -134,23 +126,23 @@ class Board
         tempy += dy
         temp_spot = self.virtual_board[tempx][tempy]
 
-        if !is_empty?(temp_spot) # checks for clear path
+        if !is_empty?(temp_spot) && (tempx != x2 || tempy != y2)
+          # checks for clear path
           # puts "Found blockage!"
-          if tempx == x2 && tempy == y2
-            return true
-            # if is_enemy?(piece1,piece2)
-            #   return true
-            # else
-            #   puts "Can't kill your ally!!"
-            #   return false
-            # end
-          else
-            puts "Your path is blocked."
-            return false
-          end
+          puts "Your path is blocked."
+          return false
         end
       end
     end
+
+    if !is_empty?(piece2)
+      if !is_enemy?(piece1,piece2)
+        puts "Can't kill your ally!!"
+        return false
+      end
+    end
+
+    true
   end
 
   def valid_pawn_move?

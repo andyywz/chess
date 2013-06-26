@@ -12,7 +12,7 @@ end
 
 class Piece
   include Moves
-  attr_accessor :possible_moves, :moveset, :value, :color
+  attr_accessor :possible_moves, :value, :color, :position
 
   def initialize(position,color)
     @position = position
@@ -34,6 +34,7 @@ class Piece
   end
 
   def get_possible_moves
+    @possible_moves = []
     @moveset.each do |move|
       x1, y1 = @position
       x, y = x1 + move[0], y1 + move[1]
