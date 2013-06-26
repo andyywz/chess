@@ -25,9 +25,8 @@ class Chess
       begin
         start_pos, end_pos = player.turn
 
-        # p @board.valid_move?(start_pos,end_pos)
         if @board.valid_move?(start_pos,end_pos)
-          # puts "Im going into move!"
+          puts "Im going into move!"
           @board.move(start_pos,end_pos)
         else
           raise ArgumentError.new "Invalid move!"

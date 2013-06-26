@@ -6,7 +6,7 @@ class HumanPlayer < Player
     begin
       puts "Choose a square to move from (e.g. 0,0):"
       start_pos = prompt_pos
-    rescue
+    rescue ArgumentError.new => e
       puts "Please limit your input (e.g. 0,0 -> 7,7)."
       retry
     end
@@ -14,7 +14,7 @@ class HumanPlayer < Player
     begin
       puts "Choose a square to move to (e.g. 1,0):"
       end_pos = prompt_pos
-    rescue
+    rescue ArgumentError.new => e
       puts "Please limit your input (e.g. 0,0 -> 7,7)."
       retry
     end

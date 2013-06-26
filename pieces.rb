@@ -12,7 +12,7 @@ end
 
 class Piece
   include Moves
-  attr_accessor :possible_moves, :value, :color, :position
+  attr_accessor :possible_moves, :value, :color, :position, :moveset
 
   def initialize(position,color)
     @position = position
@@ -141,5 +141,25 @@ class Pawn < Piece
       @moveset += [[1,0]]
       @moveset += [[2,0]] if position[0] == 1
     end
+  end
+
+  def set_pawn_moves(board, end_pos)
+    self.reset_moveset
+    x1,y1 = self.position
+    x2,y2 = end_pos
+
+    if !board[x2][y2].nil?
+      self.moveset = []
+
+      if self.color == "white" && self.color != board[x2][y2].color
+        self.moveset += [[-1,-1]] if x2 == x1 - 1 && y2 = y1 - 1
+        self.moveset += [[-1,1]] if x2 == x1 - 1 && y2 = y1 + 1
+      elsif self.color == "black" && self.color != board[x2][y2].color
+        self.moveset += [[1,-1]] if x2 == x1 + 1 && y2 = y1 - 1
+        self.moveset += [[1,1]] if x2 == x1 + 1 && y2 = y1 + 1
+      end
+
+    end
+    self.get_possible_moves
   end
 end
