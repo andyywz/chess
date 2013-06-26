@@ -12,17 +12,30 @@ class Chess
     @player2 = player2
     @board = Board.new
     @board.create_new_board
-    @board.draw
-    # play
+    # @board.draw
+    play
   end
 
   def play
     player = @player1
-    until game_over?
+    
+    2.times do
+      p player
+    # until game_over?
       @board.draw
-      player.turn
+      begin
+        start_pos, end_pos = player.turn
+        if @board.valid_move?(start_pos,end_pos) 
+          @board.move(start_pos,end_pos)
+        else
+          raise "Invalid move!"
+        end
+      rescue
+        retry
+      end
       player = player == @player1 ? @player2 : @player1
     end
+    
   end
 end
 

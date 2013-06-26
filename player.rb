@@ -1,19 +1,37 @@
 class Player
-  def initialize
-  end
 end
 
 class HumanPlayer < Player
   def turn
-    puts "Choose a square to move from (e.g. 0,0):"
-    start_pos = gets.chomp.split(',')
-    puts "Choose a square to move to (e.g. 1,0):"
-    end_pos = gets.chomp.split(',')
-    valid_move?(start_pos,end_pos)
-    move(start_pos,end_pos)
+    begin
+      puts "Choose a square to move from (e.g. 0,0):"
+      start_pos = prompt_pos
+    rescue
+      puts "Please limit your input (e.g. 0,0 -> 7,7)."
+      retry
+    end
+    
+    begin
+      puts "Choose a square to move to (e.g. 1,0):"
+      end_pos = prompt_pos
+    rescue
+      puts "Please limit your input (e.g. 0,0 -> 7,7)."
+      retry
+    end
+    
+    return [start_pos,end_pos]
+  end
+  
+  def prompt_pos
+    pos = gets.chomp.split(',')
+    
+    unless pos.length == 2 && pos[0].between?("0","7") && pos[1].between?("0","7")
+      raise "Input invalid!"
+    end
+    
+    pos
   end
 end
 
 class ComputerPlayer < Player
 end
-    

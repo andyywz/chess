@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class Board
   attr_accessor :board
 
@@ -89,15 +91,12 @@ class Board
   def valid_move?(start_pos,end_pos)
     x1, y1 = start_pos
     x2, y2 = end_pos
-
+    
     return false if @board[x1][y1].nil? # if the start pos doesn't have a piece
-    return false unless x2.between?(0,7) && y2.between?(0,7)
-    piece_object = @board[x1][y1]
-
-    return false unless piece_object.possible_moves.include?(end_pos)
+    return false unless @board[x1][y1].possible_moves.include?(end_pos)
 
     tempx, tempy = x1, y1
-    dx, dy = {x2 <=> x1}, {y2 <=> y1}
+    dx, dy = (x2 <=> x1), (y2 <=> y1)
 
     while tempx != x2 && tempy != y2
       tempx += dx
@@ -113,7 +112,7 @@ class Board
             return false
           end
         else
-          puts "Your path is blocked. Invalid move!"
+          puts "Your path is blocked."
           return false
         end
       end
@@ -144,6 +143,7 @@ unless board([tempx,tempy]).nil?
 check first if its the final pos if so
 
 return false
+end
 end
 
 =end

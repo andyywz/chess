@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Moves
   def straight
     [[1,0],[-1,0],[0,1],[0,-1]]
